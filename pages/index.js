@@ -1,11 +1,26 @@
 import Head from 'next/head'
 import RegisterForm from '../components/index/LoginRegisterForm';
 import clientPromise from '../lib/mongodb'
+import HomePage from "../components/index/Home";
+import {useEffect, useState} from "react";
+import {useRouter} from "next/router";
+import {getSession} from "next-auth/react";
 
 export default function Home({ isConnected }) {
-  const isLoggedIn = true;
 
-  let firstComponent = isLoggedIn? <Home/> : <RegisterForm/>
+  const [loading, setLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    getSession().then((session) => {
+      console.log("hier");
+      if(session) {
+        setIsLoggedIn(true)
+      }
+    })
+  })
+
+  let firstComponent = isLoggedIn? <HomePage/> : <RegisterForm/>
 
 
   return (
@@ -15,25 +30,23 @@ export default function Home({ isConnected }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        {firstComponent}
-      </main>
+      {firstComponent}
 
 
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
+      {/*<style jsx global>{`*/}
+      {/*  html,*/}
+      {/*  body {*/}
+      {/*    padding: 0;*/}
+      {/*    margin: 0;*/}
+      {/*    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,*/}
+      {/*      Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,*/}
+      {/*      sans-serif;*/}
+      {/*  }*/}
 
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
+      {/*  * {*/}
+      {/*    box-sizing: border-box;*/}
+      {/*  }*/}
+      {/*`}</style>*/}
     </div>
   )
 }
