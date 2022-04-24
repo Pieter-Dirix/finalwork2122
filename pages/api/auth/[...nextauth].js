@@ -10,8 +10,9 @@ export default NextAuth({
     providers: [
         CredentialsProvider({
             async authorize(credentials) {
-                const client = clientPromise;
-                const usersCollection = client.db().collection('users');
+                const client = await clientPromise;
+                const db = await client.db('finalwork2122')
+                const usersCollection = db.collection('users');
 
                 const user = await usersCollection.findOne({
                     email: credentials.email,
